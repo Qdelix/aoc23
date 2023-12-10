@@ -46,7 +46,6 @@ fun main() {
         return round((step.toDouble() + 0.1) / 2).toInt()
     }
 
-    // not working :(
     fun part2(input: List<String>): Int {
         val pairList: MutableList<Pair<Int, Int>> = mutableListOf()
         var step = 0
@@ -90,26 +89,27 @@ fun main() {
             }
         }
 
-
-
-        for (i in input.indices) {
-            pairList.filter { it.first == i }.sortedBy { it.second }
-        }
-
-
-        val result = mutableListOf(mutableListOf<Int>())
+        val result = mutableListOf(mutableListOf<String>())
 
         result.removeAt(0)
         for (i in lists.indices) {
-            result.add(IntArray(lists.first().size) { 0 }.toMutableList())
+            result.add(IntArray(lists.first().size) { 0 }.map { it.toString() }.toMutableList())
         }
 
         pairList.forEach {
-            result[it.first][it.second] = 1
+            result[it.first][it.second] = lists[it.first][it.second]
         }
-        result.forEach { it.println() }
+        var count = 0
+        result.forEach { line ->
+            line.println()
+            line.forEachIndexed { index, s ->
+                if (s == "0" && line.take(index + 1).count { it.contains("J") || it.contains("L") || it.contains("|") || it.contains("S") } % 2 != 0) {
+                    count++
+                }
+            }
+        }
 
-        return round((step.toDouble() + 0.1) / 2).toInt()
+        return count
     }
 
     val input = readInput("Day10")
